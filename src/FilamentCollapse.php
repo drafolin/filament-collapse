@@ -17,24 +17,27 @@ class FilamentCollapse extends Component
     protected string | Closure $uuid;
 
     /**
-     * @param  array<Component>|Closure  $components  The child components of the collapse
+     * @param  array<Component>|Closure  $schema  The child components of the collapse
      */
-    final public function __construct(array | Closure $components)
+    final public function __construct(array | Closure $schema)
     {
         $this->uuid = 'collapse__' . Str::uuid();
-        $this->childComponents = $components;
+        $this->schema($schema);
     }
 
     /**
      * Prepare a new instance of the Collapse
      *
-     * @param  array<Component>|Closure  $components  The child components of the collapse
+     * @param  array<Component>|Closure  $schema  The child components of the collapse
      *
      * @returns $this The collapse itself
      */
-    public static function make(array | Closure $components): static
+    public static function make(array | Closure $schema): static
     {
-        return app(static::class, ['childComponents' => $components]);
+        $static = app(static::class, ['schema' => $schema]);
+        $static->configure();
+
+        return $static;
     }
 
     /**
