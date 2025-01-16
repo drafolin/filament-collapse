@@ -6,7 +6,7 @@
         "dev:scripts": "node bin/build.js --dev",
         "purge": "filament-purge -i resources/dist/filament-collapse.css -o resources/dist/filament-collapse.css -v 3.x",
         "dev": "npm-run-all --parallel dev:*",
-        "build": "postcss resources/css/index.css -o resources/dist/headings.css"
+        "build": "postcss resources/css/index.css -o resources/dist/filament-collapse.css"
     },
     "devDependencies": {
         "@awcodes/filament-plugin-purge": "^1.1.1",
