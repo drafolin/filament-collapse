@@ -1,10 +1,11 @@
 {
   "name": "drafolin/filament-collapse",
-  "description": "This plugins aims to collapse multiple fields together, in the same way as ToggleButtons->grouped() ",
+  "description": "This plugins aims to collapse the space between multiple fields, in the same way as ToggleButtons->grouped() ",
   "keywords": [
     "drafolin",
     "laravel",
-    "filament-collapse"
+    "filament-collapse",
+    "group"
   ],
   "homepage": "https://github.com/drafolin/filament-collapse",
   "support": {
