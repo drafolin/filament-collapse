@@ -1,13 +1,14 @@
-# This plugins aims to collapse multiple fields together, in the same way as ToggleButtons->grouped() 
-
+# A layout field that collapses space between components.
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/drafolin/filament-collapse.svg?style=flat-square)](https://packagist.org/packages/drafolin/filament-collapse)
-[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/drafolin/filament-collapse/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/drafolin/filament-collapse/actions?query=workflow%3Arun-tests+branch%3Amain)
-[![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/drafolin/filament-collapse/fix-php-code-styling.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/drafolin/filament-collapse/actions?query=workflow%3A"Fix+PHP+code+styling"+branch%3Amain)
 [![Total Downloads](https://img.shields.io/packagist/dt/drafolin/filament-collapse.svg?style=flat-square)](https://packagist.org/packages/drafolin/filament-collapse)
 
 
+# Filament Collapse
 
-This is where your description should go. Limit it to a paragraph or two. Consider adding a small example.
+The Collapse Group field is a layout field that collapses space between components. 
+It is useful for grouping related fields together, such as phone numbers or start and end dates.
+
+![Collapse Group](./doc/images/collapse-group.jpg)
 
 ## Installation
 
@@ -17,43 +18,33 @@ You can install the package via composer:
 composer require drafolin/filament-collapse
 ```
 
-You can publish and run the migrations with:
-
-```bash
-php artisan vendor:publish --tag="filament-collapse-migrations"
-php artisan migrate
-```
-
-You can publish the config file with:
-
-```bash
-php artisan vendor:publish --tag="filament-collapse-config"
-```
-
 Optionally, you can publish the views using
 
 ```bash
 php artisan vendor:publish --tag="filament-collapse-views"
 ```
 
-This is the contents of the published config file:
-
-```php
-return [
-];
-```
-
 ## Usage
 
 ```php
-$filamentCollapse = new Drafolin\FilamentCollapse();
-echo $filamentCollapse->echoPhrase('Hello, Drafolin!');
-```
+<?php
+use Drafolin\FilamentCollapse\FilamentCollapse;
 
-## Testing
-
-```bash
-composer test
+public function form(Form $form)
+{
+    return form
+        ->schema([
+            FilamentCollapse::make([
+                // Add fields here. Ideally, these fields should be related.
+                // For now, it's only been tested with TextInput fields, and fields that inherit from it.
+                TextInput::make('first_name')
+                    ->label('First Name'), // Labels are transformed into placeholders.
+                TextInput::make('last_name')
+                    ->label('Last Name'),
+            ])
+            ->label('Collapse Group'), // This field is a regular field, so it also supports base filament properties.
+        ]);
+}
 ```
 
 ## Changelog
@@ -62,11 +53,7 @@ Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed re
 
 ## Contributing
 
-Please see [CONTRIBUTING](.github/CONTRIBUTING.md) for details.
-
-## Security Vulnerabilities
-
-Please review [our security policy](../../security/policy) on how to report security vulnerabilities.
+Everyone is welcome to contribute to this project. To do so, simply open an issue or a pull request.
 
 ## Credits
 

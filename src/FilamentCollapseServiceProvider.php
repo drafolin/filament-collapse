@@ -24,7 +24,7 @@ class FilamentCollapseServiceProvider extends PackageServiceProvider
     public function packageBooted(): void
     {
         FilamentAsset::register([
-            Css::make('filament-collapse', __DIR__ . '/../resources/dist/filament-collapse.css')->loadedOnRequest(),
+            Css::make('filament-collapse', __DIR__ . '/../resources/dist/filament-collapse.css'),
         ], 'drafolin/filament-collapse');
     }
 }

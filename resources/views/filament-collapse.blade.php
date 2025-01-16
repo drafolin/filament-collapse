@@ -1,16 +1,23 @@
 @php
+    use Filament\Support\Facades\FilamentAsset;
+    use function Filament\Support\prepare_inherited_attributes;
     $uuid = $getUuid();
-    $color = $getColor();
 @endphp
 
-<div {{$attributes}} class="grid gap-y-2"
-     x-data
-     x-init="
-        let prefixes = [...document.querySelectorAll('[data={{$uuid()}}] .fi-input-wrp-label')]
+<x-dynamic-component
+    :label="$getLabel()"
+    :id="$getId()"
+    :component="$getFieldWrapperView()"
+>
+    <div
+        {{$attributes}}
+        x-data
+        x-init="
+        let prefixes = [...document.querySelectorAll('[data={{$uuid}}] .fi-input-wrp-label')]
             .map(el => ({prefix: el, content: el.innerHTML}));
-        let inputs = document.querySelectorAll('[data={{$uuid()}}] .fi-input-wrp')
+        let inputs = document.querySelectorAll('[data={{$uuid}}] .fi-input-wrp')
         let maxWidth = 0;
-        let collapse = document.querySelector('[data={{$uuid()}}]')
+        let collapse = document.querySelector('[data={{$uuid}}]')
 
         prefixes.forEach(({prefix}) => {
             let el = prefix.cloneNode(true)
@@ -28,16 +35,12 @@
                 let p = document.createElement('p')
                 p.innerHTML = content
                 prefix.appendChild(p)
-                p.className = 'text-center'
+                p.style.textAlign = 'center'
                 ps.push(p)
             })
 
             ps.forEach(p => {
                 p.style.width = maxWidth + 'px'
-            })
-
-            inputs.forEach(input => {
-                input.classList.remove('border-b')
             })
         })
 
@@ -51,46 +54,37 @@
 
         observer.observe(collapse, {childList: true})
     ">
-    <div class="flex items-center justify-between gap-x-3">
-        <label class="inline-flex items-center gap-x-3">
-            <span class="text-sm font-medium leading-6 text-gray-950 dark:text-white">
-                {{$getLabel()}}
-            </span>
-        </label>
-    </div>
-    <div
-        {{
-            $attributes
-                ->merge($getExtraAttributes(), escape: false)
-                ->merge([
-                    'data' => $getUuid(),
-                    'class' => 'rounded-lg'
-                ])
-        }}
-    >
-        @foreach($getChildComponentContainers() as $container)
-            @foreach($container->getComponents() as $id => $child)
-                {{
-                    $child
-                        ->hiddenLabel()
-                        ->extraAttributes([
-                            'class' => '!ring-0 !border border-gray-200 dark:border-white/10'
-                        ], true)
+        <x-filament::input.wrapper
+            :data="$uuid"
+            class="filament-collapse__wrapper"
+            :attributes="
+            prepare_inherited_attributes($getExtraAttributeBag())
+        "
+        >
+            @foreach($getChildComponentContainers() as $container)
+                @foreach($container->getComponents() as $id => $child)
+                    {{
+                        $child
+                            ->hiddenLabel(count($container->getComponents()) - 1)
+                            ->extraAttributes([
+                                'class' => 'filament-collapse__collapse-item'
+                            ], true)
                         ->when(
-                            $id !== count($container->getComponents()) - 1,
+                            $id === 0,
                             fn($child) => $child->extraAttributes([
-                                'class' => '!border-b-0 rounded-b-none'
+                                'class' => 'filament-collapse__collapse-item-first'
                             ], true),
                         )
                         ->when(
                             $id === count($container->getComponents()) - 1,
                             fn($child) => $child->extraAttributes([
-                                'class' => 'rounded-t-none'
+                                'class' => 'filament-collapse__collapse-item-last'
                             ], true),
                         )
-                        ->placeholder($child->getLabel())
-                }}
+                            ->placeholder($child->getLabel())
+                    }}
+                @endforeach
             @endforeach
-        @endforeach
+        </x-filament::input.wrapper>
     </div>
-</div>
+</x-dynamic-component>
