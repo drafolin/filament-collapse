@@ -65,23 +65,26 @@
                 @foreach($container->getComponents() as $id => $child)
                     {{
                         $child
-                            ->hiddenLabel(count($container->getComponents()) - 1)
                             ->extraAttributes([
                                 'class' => 'filament-collapse__collapse-item'
                             ], true)
-                        ->when(
-                            $id === 0,
-                            fn($child) => $child->extraAttributes([
-                                'class' => 'filament-collapse__collapse-item-first'
-                            ], true),
-                        )
-                        ->when(
-                            $id === count($container->getComponents()) - 1,
-                            fn($child) => $child->extraAttributes([
-                                'class' => 'filament-collapse__collapse-item-last'
-                            ], true),
-                        )
-                            ->placeholder($child->getLabel())
+                            ->when(
+                                $id === 0,
+                                fn($child) => $child->extraAttributes([
+                                    'class' => 'filament-collapse__collapse-item-first'
+                                ], true),
+                            )
+                            ->when(
+                                $id === count($container->getComponents()) - 1,
+                                fn($child) => $child->extraAttributes([
+                                    'class' => 'filament-collapse__collapse-item-last'
+                                ], true),
+                            )
+                            ->when(
+                                !$child->isLabelHidden(),
+                                fn($child) => $child->placeholder($child->getLabel())
+                            )
+                            ->hiddenLabel(count($container->getComponents()) - 1);
                     }}
                 @endforeach
             @endforeach
