@@ -61,32 +61,30 @@
             prepare_inherited_attributes($getExtraAttributeBag())
         "
         >
-            @foreach($getChildComponentContainers() as $container)
-                @foreach($container->getComponents() as $id => $child)
-                    {{
-                        $child
-                            ->extraAttributes([
-                                'class' => 'filament-collapse__collapse-item'
-                            ], true)
-                            ->when(
-                                $id === 0,
-                                fn($child) => $child->extraAttributes([
-                                    'class' => 'filament-collapse__collapse-item-first'
-                                ], true),
-                            )
-                            ->when(
-                                $id === count($container->getComponents()) - 1,
-                                fn($child) => $child->extraAttributes([
-                                    'class' => 'filament-collapse__collapse-item-last'
-                                ], true),
-                            )
-                            ->when(
-                                !$child->isLabelHidden(),
-                                fn($child) => $child->placeholder($child->getLabel())
-                            )
-                            ->hiddenLabel(count($container->getComponents()) - 1);
-                    }}
-                @endforeach
+            @foreach($getChildComponents() as $id => $child)
+                {{
+                    $child
+                        ->extraAttributes([
+                            'class' => 'filament-collapse__collapse-item'
+                        ], true)
+                        ->when(
+                            $id === 0,
+                            fn($child) => $child->extraAttributes([
+                                'class' => 'filament-collapse__collapse-item-first'
+                            ], true),
+                        )
+                        ->when(
+                            $id === count($getChildComponents()) - 1,
+                            fn($child) => $child->extraAttributes([
+                                'class' => 'filament-collapse__collapse-item-last'
+                            ], true),
+                        )
+                        ->when(
+                            !$child->isLabelHidden(),
+                            fn($child) => $child->placeholder($child->getLabel())
+                        )
+                        ->hiddenLabel(count($getChildComponents()) - 1);
+                }}
             @endforeach
         </x-filament::input.wrapper>
     </div>
