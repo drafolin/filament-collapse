@@ -88,31 +88,32 @@ class FilamentCollapse extends Component
 
         return ComponentContainer::make($this->getLivewire())
             ->parentComponent($this)
-            ->components(collect($childComponents)
-            ->map(
-                fn(Component $child, int $id) => $child
-                    ->extraAttributes([
-                        'class' => 'filament-collapse__collapse-item'
-                    ], true)
-                    ->when(
-                        $id === 0,
-                        fn($child) => $child->extraAttributes([
-                            'class' => 'filament-collapse__collapse-item-first'
-                        ], true),
+            ->components(
+                collect($childComponents)
+                    ->map(
+                        fn (Component $child, int $id) => $child
+                            ->extraAttributes([
+                                'class' => 'filament-collapse__collapse-item',
+                            ], true)
+                            ->when(
+                                $id === 0,
+                                fn ($child) => $child->extraAttributes([
+                                    'class' => 'filament-collapse__collapse-item-first',
+                                ], true),
+                            )
+                            ->when(
+                                $id === count($childComponents) - 1,
+                                fn ($child) => $child->extraAttributes([
+                                    'class' => 'filament-collapse__collapse-item-last',
+                                ], true),
+                            )
+                            ->when(
+                                ! $child->isLabelHidden(),
+                                fn ($child) => $child->placeholder($child->getLabel())
+                            )
+                            ->hiddenLabel()
                     )
-                    ->when(
-                        $id === count($childComponents) - 1,
-                        fn($child) => $child->extraAttributes([
-                            'class' => 'filament-collapse__collapse-item-last'
-                        ], true),
-                    )
-                    ->when(
-                        !$child->isLabelHidden(),
-                        fn($child) => $child->placeholder($child->getLabel())
-                    )
-                    ->hiddenLabel()
-                )
-                ->toArray()
+                    ->toArray()
             );
     }
 }
