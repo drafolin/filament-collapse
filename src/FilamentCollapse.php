@@ -109,7 +109,7 @@ class FilamentCollapse extends Component
                             )
                             ->when(
                                 ! $child->isLabelHidden(),
-                                fn ($child) => $child->placeholder($child->getLabel())
+                                fn($child) => method_exists($child, 'placeholder') ?$child->placeholder($child->getLabel()): $child
                             )
                             ->hiddenLabel()
                     )
