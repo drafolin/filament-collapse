@@ -3,6 +3,7 @@
 namespace Drafolin\FilamentCollapse;
 
 use Closure;
+use Filament\Forms\ComponentContainer;
 use Filament\Forms\Components\Component;
 use Filament\Forms\Components\Concerns\HasChildComponents;
 use Illuminate\Support\Str;
@@ -75,5 +76,43 @@ class FilamentCollapse extends Component
     public function getUuid(): string
     {
         return $this->evaluate($this->uuid);
+    }
+
+    public function getChildComponentContainer($key = null): ComponentContainer
+    {
+        if (filled($key) && array_key_exists($key, $containers = $this->getChildComponentContainers())) {
+            return $containers[$key];
+        }
+
+        $childComponents = $this->getChildComponents();
+
+        return ComponentContainer::make($this->getLivewire())
+            ->parentComponent($this)
+            ->components(collect($childComponents)
+            ->map(
+                fn(Component $child, int $id) => $child
+                    ->extraAttributes([
+                        'class' => 'filament-collapse__collapse-item'
+                    ], true)
+                    ->when(
+                        $id === 0,
+                        fn($child) => $child->extraAttributes([
+                            'class' => 'filament-collapse__collapse-item-first'
+                        ], true),
+                    )
+                    ->when(
+                        $id === count($childComponents) - 1,
+                        fn($child) => $child->extraAttributes([
+                            'class' => 'filament-collapse__collapse-item-last'
+                        ], true),
+                    )
+                    ->when(
+                        !$child->isLabelHidden(),
+                        fn($child) => $child->placeholder($child->getLabel())
+                    )
+                    ->hiddenLabel()
+                )
+                ->toArray()
+            );
     }
 }

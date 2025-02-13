@@ -30,3 +30,7 @@
   box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow),
     var(--tw-shadow, 0 0 #0000) !important;
 }
+
+.filament-collapse__wrapper .fi-fo-component-ctn {
+  gap: 0;
+}
